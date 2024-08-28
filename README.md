@@ -1,5 +1,11 @@
 # Hướng dẫn sử file script:
 
+## 0. Môi trường đã lab
+- architecture: arm64
+- os: ubuntu 24.04 noble
+- core: 2
+- ram: 2G
+
 ## 1. Pre-Setup all vm
 - Xác định số node master - worker, setup ip, hostname, hosts
 file /etc/hosts của tất cả các node đều cần thông tin của chính nó và các node còn lại
