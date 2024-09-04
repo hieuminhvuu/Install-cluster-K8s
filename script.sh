@@ -27,7 +27,7 @@ done
 
 # Split nodes into master and worker nodes
 MASTER_NODES=("${NAMES[@]:0:NUM_MASTERS}")
-WORKER_NODES=("${NAMES[@]:NUM_MASTERS]}")
+WORKER_NODES=("${NAMES[@]:NUM_MASTERS}")
 
 # Update system and install necessary packages
 sudo apt-get update
