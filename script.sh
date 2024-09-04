@@ -10,11 +10,11 @@ SUDO_PASS="your_sudo_password_here"
 # Write ip of master node first, then worker node
 NODES=("your-node-ip-1" "your-node-ip-2" "your-node-ip-3")
 
-# Get the number of nodes
-count=${#NODES[@]}
-
 # Number of master nodes
 NUM_MASTERS=1  # Adjust this as needed, only odd number
+
+# Get the number of nodes
+count=${#NODES[@]}
 
 # Create an array of node names
 NAMES=()

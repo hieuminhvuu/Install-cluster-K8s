@@ -30,12 +30,11 @@ sudo -s
 ```
 - sử dụng git clone project này về
 - vim vào file script.sh sửa những thông số sau:
-  - USER : user mặc định khi cài vm mới, ví dụ như ubuntu, tránh sử dụng trực tiếp user root
+  - USER : user mặc định khi cài vm mới, ví dụ như "ubuntu", tránh sử dụng trực tiếp user root
   - KUBESPRAY_VERSION : phiên bản kubespray muốn cài "release-2.25"
   - PASSWORD="password" : password của user ubuntu
-  - NODES=("your-node-ip-1" "your-node-ip-2" "your-node-ip-3") : ip của các node
-  - MASTER_NODES=("${NAMES[0]}") : ip của các master node
-  - WORKER_NODES=("${NAMES[@]:1}") : ip của các worker node
+  - NODES=("your-node-ip-1" "your-node-ip-2" "your-node-ip-3") : ip của các node, yêu cầu ip của master node đứng đầu mảng theo thứ tự từ master1 đến masterx, sau đó tới node1 tới nodex, ví dụ NODES=("master1-ip" "master2-ip" "master3-ip" ... "node1-ip" "node2-ip" "node3-ip" ...)
+  - NUM_MASTERS : số lượng master node, số lượng master node luôn là số lẻ
 - chạy file bash script để quá trình tự động chạy, thời gian mất khoảng 20-25p hoặc có thể hơn tuỳ vào độ trễ mạng.
 ```
 bash script.sh
