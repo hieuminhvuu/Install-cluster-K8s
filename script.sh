@@ -1,8 +1,10 @@
 #!/bin/bash
 
 USER="ubuntu"
-KUBESPRAY_VERSION="release-2.25"
 PASSWORD="password"
+KUBESPRAY_VERSION="release-2.25"
+# Define the sudo password
+SUDO_PASS="your_sudo_password_here"
 
 # Initialize array of nodes
 # Write ip of master node first, then worker node
@@ -11,21 +13,21 @@ NODES=("your-node-ip-1" "your-node-ip-2" "your-node-ip-3")
 # Get the number of nodes
 count=${#NODES[@]}
 
+# Number of master nodes (change this as needed)
+NUM_MASTERS=1
+
 # Create an array of node names
 NAMES=()
-for ((i=1; i<=count; i++)); do
+for ((i=1; i<=NUM_MASTERS; i++)); do
+  NAMES+=("master$i")
+done
+for ((i=1; i<=(count-NUM_MASTERS); i++)); do
   NAMES+=("node$i")
 done
 
 # Split nodes into master and worker nodes
-# 1 master node
-MASTER_NODES=("${NAMES[0]}") # includes node1
-WORKER_NODES=("${NAMES[@]:1}") # includes node2 and node3
-
-# 2 master nodes
-# MASTER_NODES=("${NAMES[0]}" "${NAMES[1]}") 
-# WORKER_NODES=("${NAMES[@]:2}") 
-#change the number of master node by changing the numbers and adding to array
+MASTER_NODES=("${NAMES[@]:0:NUM_MASTERS}")
+WORKER_NODES=("${NAMES[@]:NUM_MASTERS}")
 
 # Update system and install necessary packages
 sudo apt-get update
@@ -108,8 +110,8 @@ cat << EOF >> inventory/mycluster/hosts.yaml
       hosts: {}
 EOF
 
-# Delpoy
-ansible-playbook -i inventory/mycluster/hosts.yaml --become --become-user=root cluster.yml -u $USER --ask-become-pass
+# Deploy
+ansible-playbook -i inventory/mycluster/hosts.yaml --become --become-user=root cluster.yml -u $USER --extra-vars "ansible_become_pass=$SUDO_PASS"
 
 #Extend cert to 10 years
 wget https://raw.githubusercontent.com/yuyicai/update-kube-cert/master/update-kubeadm-cert.sh
