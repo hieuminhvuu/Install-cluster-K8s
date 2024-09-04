@@ -13,21 +13,21 @@ NODES=("your-node-ip-1" "your-node-ip-2" "your-node-ip-3")
 # Get the number of nodes
 count=${#NODES[@]}
 
-# Number of master nodes (change this as needed)
-NUM_MASTERS=1
+# Number of master nodes
+NUM_MASTERS=1  # Adjust this as needed, only odd number
 
 # Create an array of node names
 NAMES=()
 for ((i=1; i<=NUM_MASTERS; i++)); do
   NAMES+=("master$i")
 done
-for ((i=1; i<=(count-NUM_MASTERS); i++)); do
+for ((i=1; i<=(${#NODES[@]}-NUM_MASTERS); i++)); do
   NAMES+=("node$i")
 done
 
 # Split nodes into master and worker nodes
 MASTER_NODES=("${NAMES[@]:0:NUM_MASTERS}")
-WORKER_NODES=("${NAMES[@]:NUM_MASTERS}")
+WORKER_NODES=("${NAMES[@]:NUM_MASTERS]}")
 
 # Update system and install necessary packages
 sudo apt-get update
@@ -76,6 +76,13 @@ done
 # Config
 cp -rfp inventory/sample inventory/mycluster
 CONFIG_FILE=inventory/mycluster/hosts.yaml python3 contrib/inventory_builder/inventory.py ${NODES[@]}
+
+# Rename nodes in the hosts.yaml file
+for i in "${!NODES[@]}"; do
+  old_name="node$((i+1))"
+  new_name="${NAMES[i]}"
+  sed -i "s/$old_name:/$new_name:/g" inventory/mycluster/hosts.yaml
+done
 
 # Modify hosts.yaml to set kube_control_plane, kube_node, and etcd groups
 sed -i '/^  children:/,$ d' inventory/mycluster/hosts.yaml

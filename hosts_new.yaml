@@ -1,28 +1,35 @@
 all:
   hosts:
+    master1:
+      ansible_host: 192.168.148.101
+      ip: 192.168.148.101
+      access_ip: 192.168.148.101
+    master2:
+      ansible_host: 192.168.148.102
+      ip: 192.168.148.102
+      access_ip: 192.168.148.102
+    master3:
+      ansible_host: 192.168.148.103
+      ip: 192.168.148.103
+      access_ip: 192.168.148.103
     node1:
-      ansible_host: "your-node-ip-1"
-      ip: "your-node-ip-1"
-      access_ip: "your-node-ip-1"
-    node2:
-      ansible_host: "your-node-ip-2"
-      ip: "your-node-ip-2"
-      access_ip: "your-node-ip-2"
-    node3:
-      ansible_host: "your-node-ip-3"
-      ip: "your-node-ip-3"
-      access_ip: "your-node-ip-3"
+      ansible_host: 192.168.148.104
+      ip: 192.168.148.104
+      access_ip: 192.168.148.104
   children:
     kube_control_plane:
       hosts:
-        node1:
+        master1:
+        master2:
+        master3:
     kube_node:
       hosts:
-        node2:
-        node3:
+        node1:
     etcd:
       hosts:
-        node1:
+        master1:
+        master2:
+        master3:
     k8s_cluster:
       children:
         kube_control_plane:
